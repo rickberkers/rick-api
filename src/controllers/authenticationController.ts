@@ -11,7 +11,7 @@ export default class AuthenticationController {
 
     login = (req: express.Request, res: express.Response, next: express.NextFunction) => {
         try {
-            return this.authenticationService.getToken();
+            res.json(this.authenticationService.getToken());
         } catch (err) {
             return next(err);
         }
