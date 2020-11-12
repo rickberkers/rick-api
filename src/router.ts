@@ -1,16 +1,26 @@
 import express from 'express';
+
 import { verifyToken } from './middleware/authenticationMiddleware';
 
 import AuthenticationController from "./controllers/authenticationController";
 import ItemController from "./controllers/itemController";
 
-const router = express.Router();
+export default class Router {
 
-const authenticationController = new AuthenticationController();
-const itemController = new ItemController();
+    router: express.Router = express.Router();
 
-router.post('/login', authenticationController.login);
-router.get('/items', verifyToken, itemController.index);
-router.post('/items', verifyToken, itemController.create);
+    constructor() {
+        const authenticationController = new AuthenticationController();
+        const itemController = new ItemController();
 
-export default router;
+        this.router.post('/login', authenticationController.login);
+        this.router.get('/items', verifyToken, itemController.index);
+        this.router.get('/items/:id', verifyToken, itemController.get);
+        this.router.post('/items', verifyToken, itemController.create);
+    }
+
+    get = (): express.Router => {
+        return this.router;
+    }
+}
+

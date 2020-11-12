@@ -1,27 +1,37 @@
 import express from 'express';
-import AuthenticationService from "../services/authenticationService";
+import ItemService from "../services/itemService";
+import {Item} from "../entities/item";
 
 export default class ItemController {
 
-    authenticationService: AuthenticationService;
+    itemService: ItemService;
 
     constructor() {
-        this.authenticationService = new AuthenticationService();
+        this.itemService = new ItemService();
     }
 
-    index = (req: express.Request, res: express.Response, next: express.NextFunction) => {
+    index = async (req: express.Request, res: express.Response, next: express.NextFunction) => {
         try {
-            return res.json({ rick: "rick" });
+            return res.json(await this.itemService.getAll());
         } catch (err) {
-            return next(err);
+            res.status(404).json({message: err.message});
         }
     }
 
-    create = (req: express.Request, res: express.Response, next: express.NextFunction) => {
+    get = async (req: express.Request, res: express.Response, next: express.NextFunction) => {
+        const { id } = req.params;
         try {
-            return res.json({ rick: "rick" });
+            res.json(await this.itemService.get(id));
         } catch (err) {
-            return next(err);
+            res.status(404).json({message: err.message});
+        }
+    }
+
+    create = async (req: express.Request, res: express.Response, next: express.NextFunction) => {
+        try {
+            res.status(201).json((await this.itemService.create(req.body)));
+        } catch (err) {
+            res.status(400).json({message: err.message});
         }
     }
 }

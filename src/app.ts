@@ -1,12 +1,22 @@
 import express from 'express';
-import router from "./router";
-import {config as dotEnvConfig} from 'dotenv'
+import Router from "./router";
+import { config as dotEnvConfig } from 'dotenv'
+import { Database } from "./database";
+import bodyParser from "body-parser";
 
 dotEnvConfig();
 
-const app = express();
 const port = 3000;
+const app = express();
 
-app.use('/', router);
+Database.connect().then(() => {
 
-app.listen(port, () => console.log(`Example app listening on port ${port}!`))
+    const router = new Router();
+    app.use(bodyParser.json());
+    app.use('/', router.get());
+
+    app.listen(port, () => console.log(`rick-api listening on port ${port}`));
+
+}).catch(error => {
+    console.log(error);
+});
