@@ -15,8 +15,8 @@ Database.connect().then(() => {
     const router = new Router();
     app.use(bodyParser.json());
 
-    app.use(errorMiddleware);
     app.use('/', router.get());
+    app.use(errorMiddleware);
 
     app.listen(port, () => console.log(`rick-api listening on port ${port}`));
 

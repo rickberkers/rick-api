@@ -1,6 +1,6 @@
 import express from 'express';
 import ItemService from "../services/itemService";
-import {Item} from "../entities/item";
+import createHttpError from "http-errors";
 
 export default class ItemController {
 
@@ -14,7 +14,7 @@ export default class ItemController {
         try {
             return res.json(await this.itemService.getAll());
         } catch (err) {
-            res.status(404).json({message: err.message});
+            next(createHttpError(404, err.message));
         }
     }
 
@@ -23,7 +23,7 @@ export default class ItemController {
         try {
             res.json(await this.itemService.get(id));
         } catch (err) {
-            res.status(404).json({message: err.message});
+            next(createHttpError(404, err.message));
         }
     }
 
@@ -31,7 +31,7 @@ export default class ItemController {
         try {
             res.status(201).json((await this.itemService.create(req.body)));
         } catch (err) {
-            res.status(400).json({message: err.message});
+            next(createHttpError(404, err.message));
         }
     }
 }
