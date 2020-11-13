@@ -10,19 +10,19 @@ export default class ItemService {
     }
 
     getAll = async (): Promise<Item[]> => {
-        try {
-            return await this.itemRepository.find();
-        } catch {
-            throw new Error('The items could not be retrieved');
+        const items = await this.itemRepository.find();
+        if (!items) {
+            throw new Error('Items could not be retrieved');
         }
+        return items;
     }
 
     get = async (id: string): Promise<Item> => {
-        try {
-            return await this.itemRepository.findOneOrFail(id);
-        } catch {
-            throw new Error('The item could not be found');
+        const item = await this.itemRepository.findOne(id);
+        if (!item) {
+            throw new Error('Item was not found');
         }
+        return item;
     }
 
     create = async (item: any): Promise<Item[]> => {

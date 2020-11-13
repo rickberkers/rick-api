@@ -1,8 +1,9 @@
 import express from 'express';
 import Router from "./router";
 import { config as dotEnvConfig } from 'dotenv'
-import { Database } from "./database";
+import Database from "./database";
 import bodyParser from "body-parser";
+import errorMiddleware from "./middleware/errorMiddleware";
 
 dotEnvConfig();
 
@@ -13,6 +14,8 @@ Database.connect().then(() => {
 
     const router = new Router();
     app.use(bodyParser.json());
+
+    app.use(errorMiddleware);
     app.use('/', router.get());
 
     app.listen(port, () => console.log(`rick-api listening on port ${port}`));

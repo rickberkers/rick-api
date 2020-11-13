@@ -1,6 +1,7 @@
 import {Connection, createConnection} from 'typeorm';
+import {join} from "path";
 
-export class Database {
+export default class Database {
     public static connect(): Promise<Connection> {
         let { DB_TYPE, DB_HOST, DB_PORT, DB_USERNAME, DB_PASSWORD, DB_NAME } = process.env;
         return createConnection({
@@ -11,7 +12,7 @@ export class Database {
             username: DB_USERNAME,
             password: DB_PASSWORD,
             database: DB_NAME,
-            entities: [`src/entities/*.ts`],
+            entities: [join(__dirname, '**', `entities/*.{ts,js}`)],
             synchronize: true
         });
     }
