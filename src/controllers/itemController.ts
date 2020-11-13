@@ -14,7 +14,7 @@ export default class ItemController {
         try {
             return res.json(await this.itemService.getAll());
         } catch (err) {
-            next(createHttpError(404, err.message));
+            res.json()
         }
     }
 
